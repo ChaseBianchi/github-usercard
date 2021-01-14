@@ -4,7 +4,7 @@ import axios from 'axios';
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-axios.get('https://api.github.com/users/chasebianchi');
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -18,6 +18,19 @@ axios.get('https://api.github.com/users/chasebianchi');
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+
+axios.get('https://api.github.com/users/chasebianchi')
+  .then(data => {
+      const cardsDiv = document.querySelector('.cards');
+      const newCard = cardCreator(data)
+      console.log(cardCreator(data));
+      cardsDiv.appendChild(newCard);
+      
+    })
+  .catch(err=>{
+    console.log('error');
+    debugger
+  })
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -51,7 +64,7 @@ const followersArray = [];
       </div>
     </div>
 */
-const cardCreator = (object)=>{
+const cardCreator = (obj)=>{
   // instantiation and classes
   const card = document.createElement('div');
   card.classList.add('card')
@@ -67,6 +80,18 @@ const cardCreator = (object)=>{
   const aTag = document.createElement('a');
   const followers = document.createElement('p');
   const following = document.createElement('p');
+// contents
+imageURL.textContent = `${obj.url}`
+h3.textContent = `${obj.name}`
+username.textContent = `${obj.login}`
+location.textContent = `Location: ${obj.location}`
+profile.textContent = `Profile: `
+aTag.textContent = `${obj.url}`;
+aTag.href = `${obj.url}`;
+followers.textContent = `${obj.followers}`;
+following.textContent = `${obj.following}`;
+
+
 // appending childs
 card.appendChild(imageURL);
 card.appendChild(cardInfo);
@@ -77,8 +102,10 @@ cardInfo.appendChild(profile);
 profile.appendChild(aTag);
 cardInfo.appendChild(followers);
 cardInfo.appendChild(following);
+return card
 }
 
+// console.log(cardCreator({url: 'asdf', name: 'john', login: 'asdfff', location: 'nowhere', followers: 'dont ask', following: 'no one'}))
 /*
   List of LS Instructors Github username's:
     tetondan
