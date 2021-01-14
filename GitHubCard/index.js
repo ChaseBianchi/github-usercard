@@ -20,16 +20,14 @@ import axios from 'axios';
 */
 
 axios.get('https://api.github.com/users/chasebianchi')
-  .then(data => {
+  .then(call => {
       const cardsDiv = document.querySelector('.cards');
-      const newCard = cardCreator(data)
-      console.log(cardCreator(data));
+      const newCard = cardCreator(call.data)
+      console.log(cardCreator(call.data));
       cardsDiv.appendChild(newCard);
-      
     })
   .catch(err=>{
-    console.log('error');
-    debugger
+    console.log(err);
   })
 
 /*
@@ -43,7 +41,27 @@ axios.get('https://api.github.com/users/chasebianchi')
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell',
+];
+
+followersArray.forEach((person)=>{
+  axios.get(`https://api.github.com/users/${person}`)
+  .then(call => {
+      const cardsDiv = document.querySelector('.cards');
+      const newCard = cardCreator(call.data)
+      console.log(cardCreator(call.data));
+      cardsDiv.appendChild(newCard);
+    })
+  .catch(err=>{
+    console.log(err);
+  })
+})
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -81,15 +99,15 @@ const cardCreator = (obj)=>{
   const followers = document.createElement('p');
   const following = document.createElement('p');
 // contents
-imageURL.textContent = `${obj.url}`
-h3.textContent = `${obj.name}`
-username.textContent = `${obj.login}`
+imageURL.setAttribute('src', obj.avatar_url);
+h3.textContent = obj.name
+username.textContent = obj.login
 location.textContent = `Location: ${obj.location}`
 profile.textContent = `Profile: `
-aTag.textContent = `${obj.url}`;
-aTag.href = `${obj.url}`;
-followers.textContent = `${obj.followers}`;
-following.textContent = `${obj.following}`;
+aTag.textContent = obj.html_url;
+aTag.setAttribute('href', obj.html_url)
+followers.textContent = obj.followers;
+following.textContent = obj.following;
 
 
 // appending childs
